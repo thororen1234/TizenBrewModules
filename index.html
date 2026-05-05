@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TizenBrew Modules</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #0a0a0f;
+            --surface: #111118;
+            --border: #1e1e2e;
+            --accent: #e8ff47;
+            --accent2: #47ffe8;
+            --text: #e8e8f0;
+            --muted: #555568;
+            --app-tag: #1a2a1a;
+            --app-tag-text: #7dff7d;
+            --mod-tag: #1a1a2a;
+            --mod-tag-text: #7d9fff;
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Grid background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(232, 255, 71, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(232, 255, 71, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 60px 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            margin-bottom: 56px;
+        }
+
+        .eyebrow {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .eyebrow::before {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--accent);
+        }
+
+        h1 {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(28px, 5vw, 48px);
+            font-weight: 700;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            color: var(--text);
+        }
+
+        h1 span {
+            color: var(--accent);
+        }
+
+        .subtitle {
+            margin-top: 14px;
+            font-size: 15px;
+            color: var(--muted);
+            line-height: 1.6;
+            max-width: 480px;
+        }
+
+        .config-url {
+            margin-top: 28px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            padding: 12px 16px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .config-url code {
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: var(--accent);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: none;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 6px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .copy-btn.copied {
+            border-color: var(--accent2);
+            color: var(--accent2);
+        }
+
+        .status-bar {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--muted);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .status-dot.ok {
+            background: var(--accent);
+            animation: none;
+        }
+
+        .status-dot.error {
+            background: #ff5c5c;
+            animation: none;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .modules-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .module-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px 28px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 12px;
+            align-items: start;
+            opacity: 0;
+            transform: translateY(12px);
+            animation: fadeUp 0.4s ease forwards;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .module-card:hover {
+            border-color: #2e2e42;
+            background: #13131c;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .module-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .module-fullname {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .module-desc {
+            font-size: 13px;
+            color: #8888a0;
+            line-height: 1.5;
+            max-width: 560px;
+        }
+
+        .module-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+        }
+
+        .tag {
+            font-family: 'Space Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 4px 8px;
+            border-radius: 3px;
+        }
+
+        .tag-app {
+            background: var(--app-tag);
+            color: var(--app-tag-text);
+        }
+
+        .tag-mods {
+            background: var(--mod-tag);
+            color: var(--mod-tag-text);
+        }
+
+        .tag-unknown {
+            background: #1e1a1a;
+            color: #ff9966;
+        }
+
+        .version {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+        }
+
+        .skeleton {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 24px 28px;
+            margin-bottom: 2px;
+        }
+
+        .skel-line {
+            height: 12px;
+            border-radius: 3px;
+            background: linear-gradient(90deg, #1a1a24 25%, #22222e 50%, #1a1a24 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            margin-bottom: 10px;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .error-box {
+            background: #1a0e0e;
+            border: 1px solid #3a1a1a;
+            border-left: 3px solid #ff5c5c;
+            border-radius: 4px;
+            padding: 16px 20px;
+            font-family: 'Space Mono', monospace;
+            font-size: 12px;
+            color: #ff9999;
+            line-height: 1.6;
+        }
+
+        .count {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            color: var(--muted);
+            margin-left: auto;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .section-label {
+            font-family: 'Space Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        .divider {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="eyebrow">Module Registry</div>
+            <h1>TizenBrew <span>Modules</span></h1>
+            <p class="subtitle">
+                Module registry for my custom TizenBrew fork. Add the JSON link below to your config to sync these
+                packages.
+            </p>
+            <div class="config-url">
+                <code id="config-url-text">Loading...</code>
+                <button class="copy-btn" onclick="copyUrl()">Copy</button>
+            </div>
+        </header>
+
+        <div class="section-header">
+            <span class="section-label">Modules</span>
+            <div class="divider"></div>
+            <span class="count" id="module-count"></span>
+        </div>
+
+        <div class="status-bar">
+            <div class="status-dot" id="status-dot"></div>
+            <span id="status-text">Fetching modules.json...</span>
+        </div>
+
+        <div id="modules-container">
+            <div class="skeleton">
+                <div class="skel-line" style="width:40%"></div>
+                <div class="skel-line" style="width:70%"></div>
+                <div class="skel-line" style="width:55%"></div>
+            </div>
+            <div class="skeleton">
+                <div class="skel-line" style="width:35%"></div>
+                <div class="skel-line" style="width:65%"></div>
+                <div class="skel-line" style="width:50%"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const MODULES_JSON_URL = 'modules.json';
+        const JSDELIVR = 'https://cdn.jsdelivr.net';
+
+        function setStatus(text, state) {
+            document.getElementById('status-text').textContent = text;
+            const dot = document.getElementById('status-dot');
+            dot.className = 'status-dot' + (state ? ` ${state}` : '');
+        }
+
+        function copyUrl() {
+            const url = document.getElementById('config-url-text').textContent;
+            navigator.clipboard.writeText(url).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Copied!';
+                btn.classList.add('copied');
+                setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+            });
+        }
+
+        function tagClass(type) {
+            if (type === 'app') return 'tag-app';
+            if (type === 'mods') return 'tag-mods';
+            return 'tag-unknown';
+        }
+
+        function renderModules(modules) {
+            const container = document.getElementById('modules-container');
+            container.innerHTML = '';
+            document.getElementById('module-count').textContent = `${modules.length} module${modules.length !== 1 ? 's' : ''}`;
+
+            modules.forEach((mod, i) => {
+                const card = document.createElement('div');
+                card.className = 'module-card';
+                card.style.animationDelay = `${i * 60}ms`;
+                card.innerHTML = `
+                    <div>
+                        <div class="module-name">${mod.appName || mod.fullName}</div>
+                        <div class="module-fullname">${mod.fullName}</div>
+                        <div class="module-desc">${mod.description || 'No description available.'}</div>
+                    </div>
+                    <div class="module-meta">
+                        <span class="tag ${tagClass(mod.packageType)}">${mod.packageType || 'unknown'}</span>
+                        <span class="version">v${mod.version || '?.?.?'}</span>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function renderError(msg) {
+            document.getElementById('modules-container').innerHTML = `<div class="error-box">${msg}</div>`;
+        }
+
+        async function fetchModuleMeta(moduleName) {
+            try {
+                const res = await fetch(`${JSDELIVR}/${moduleName}/package.json`);
+                const json = await res.json();
+                const parts = [moduleName.substring(0, moduleName.indexOf('/')), moduleName.substring(moduleName.indexOf('/') + 1)];
+                return {
+                    fullName: moduleName,
+                    appName: json.appName || parts[1],
+                    version: json.version || 'unknown',
+                    packageType: json.packageType || 'unknown',
+                    description: json.description || '',
+                };
+            } catch {
+                return {
+                    fullName: moduleName,
+                    appName: moduleName,
+                    version: 'unknown',
+                    packageType: 'unknown',
+                    description: 'Failed to fetch module metadata.',
+                };
+            }
+        }
+
+        async function main() {
+            document.getElementById('config-url-text').textContent = window.location.origin + '/modules.json';
+
+            setStatus('Fetching modules.json...', null);
+
+            let modulesList;
+            try {
+                const res = await fetch(MODULES_JSON_URL);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const config = await res.json();
+                modulesList = config.modules;
+                if (!Array.isArray(modulesList) || modulesList.length === 0) throw new Error('No modules found in modules.json');
+            } catch (e) {
+                setStatus(`Failed to load modules.json: ${e.message}`, 'error');
+                renderError(`Could not fetch <code>modules.json</code>: ${e.message}<br><br>Make sure the file exists at the same origin and is valid JSON with a <code>"modules"</code> array.`);
+                return;
+            }
+
+            setStatus(`Fetching metadata for ${modulesList.length} module(s)...`, null);
+            const modules = await Promise.all(modulesList.map(fetchModuleMeta));
+
+            setStatus(`${modules.length} module(s) loaded`, 'ok');
+            renderModules(modules);
+        }
+
+        main();
+    </script>
+</body>
+
+</html>

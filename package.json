@@ -1,0 +1,23 @@
+{
+    "name": "tizenbrewmodules",
+    "version": "1.0.0",
+    "description": "TizenBrew has hardcoded modules, this repository is for hosting the modules.json file that TizenBrew uses. This allows for easier updates and contributions to the modules list.",
+    "homepage": "https://github.com/thororen1234/TizenBrewModules#readme",
+    "bugs": {
+        "url": "https://github.com/thororen1234/TizenBrewModules/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/thororen1234/TizenBrewModules.git"
+    },
+    "license": "GPL-3.0-or-later",
+    "author": "thororen1234",
+    "scripts": {
+        "test": "node index.js"
+    },
+    "dependencies": {
+        "express": "^5.2.1",
+        "node-cron": "^4.2.1"
+    },
+    "packageManager": "pnpm@9.1.1"
+}
