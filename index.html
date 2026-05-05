@@ -432,7 +432,7 @@
                 card.innerHTML = `
                     <div>
                         <div class="module-name">${mod.appName || mod.fullName}</div>
-                        <div class="module-fullname">${mod.fullName}</div>
+                        <div class="module-fullname">${mod.githubRepo ? `github.com/${mod.githubRepo}` : mod.fullName}</div>
                         <div class="module-desc">${mod.description || 'No description available.'}</div>
                     </div>
                     <div class="module-meta">
@@ -451,6 +451,7 @@
         async function fetchModuleMeta(moduleInput) {
             if (typeof moduleInput === 'object' && moduleInput !== null) {
                 return {
+                    githubRepo: moduleInput.githubRepo || null,
                     fullName: moduleInput.fullName || 'Unknown URL',
                     appName: moduleInput.appName || 'Unknown App',
                     version: moduleInput.version || 'unknown',

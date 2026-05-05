@@ -9,6 +9,60 @@
             "description": "Standalone Native Tizen Application.",
             "version": "1.0.0",
             "fullName": "https://github.com/reisxd/HyperTizen/releases/download/v1.0.0/HyperTizen.tpk"
+        },
+        {
+            "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
+            "fileName": "Jellyfin.wgt",
+            "appName": "Jellyfin",
+            "packageType": "wgt",
+            "description": "Jellyfin Samsung TV Client.",
+            "version": "2026-05-05-1354",
+            "fullName": "https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/download/2026-05-05-1354/Jellyfin.wgt"
+        },
+        {
+            "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
+            "fileName": "Jellyfin-SmartHub.wgt",
+            "appName": "Jellyfin with SmartHub Integration",
+            "packageType": "wgt",
+            "description": "Jellyfin Samsung TV Client with SmartHub Integration.",
+            "version": "2026-05-05-1354",
+            "fullName": "https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/download/2026-05-05-1354/Jellyfin-SmartHub.wgt"
+        },
+        {
+            "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
+            "fileName": "Jellyfin-secondary.wgt",
+            "appName": "Jellyfin Secondary",
+            "packageType": "wgt",
+            "description": "Jellyfin Samsung TV Client with a different app id, allowing installation alongside the original.",
+            "version": "2026-05-05-1354",
+            "fullName": "https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/download/2026-05-05-1354/Jellyfin-secondary.wgt"
+        },
+        {
+            "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
+            "fileName": "Jellyfin-OblongIcon.wgt",
+            "appName": "Jellyfin with an Oblong Icon",
+            "packageType": "wgt",
+            "description": "Jellyfin Samsung TV Client with an oblong icon.",
+            "version": "2026-05-05-1354",
+            "fullName": "https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/download/2026-05-05-1354/Jellyfin-OblongIcon.wgt"
+        },
+        {
+            "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
+            "fileName": "Jellyfin-SmartHub.wgt",
+            "appName": "Jellyfin with a Potentially Gray Bars Fix",
+            "packageType": "wgt",
+            "description": "Jellyfin Samsung TV Client with a Potentially Gray Bars Fix.",
+            "version": "2026-05-05-1354",
+            "fullName": "https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/download/2026-05-05-1354/Jellyfin-GrayFix.wgt"
+        },
+        {
+            "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
+            "fileName": "Jellyfin-OSA.wgt",
+            "appName": "Jellyfin with SmartHub Integration and an Oblong Icon",
+            "packageType": "wgt",
+            "description": "Jellyfin Samsung TV Client with SmartHub Integration and an Oblong Icon.",
+            "version": "2026-05-05-1354",
+            "fullName": "https://github.com/jeppevinkel/jellyfin-tizen-builds/releases/download/2026-05-05-1354/Jellyfin-OSA.wgt"
         }
     ]
 }
