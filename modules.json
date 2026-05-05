@@ -1,5 +1,14 @@
 {
     "modules": [
-        "npm/@foxreis/tizentube"
+        "npm/@foxreis/tizentube",
+        {
+            "githubRepo": "reisxd/HyperTizen",
+            "fileName": "HyperTizen.tpk",
+            "appName": "HyperTizen",
+            "packageType": "tpk",
+            "description": "Standalone Native Tizen Application.",
+            "version": "1.0.0",
+            "fullName": "https://github.com/reisxd/HyperTizen/releases/download/v1.0.0/HyperTizen.tpk"
+        }
     ]
 }

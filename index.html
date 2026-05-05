@@ -428,6 +428,7 @@
                 const card = document.createElement('div');
                 card.className = 'module-card';
                 card.style.animationDelay = `${i * 60}ms`;
+                card.style.marginBottom = '10px';
                 card.innerHTML = `
                     <div>
                         <div class="module-name">${mod.appName || mod.fullName}</div>
@@ -447,7 +448,18 @@
             document.getElementById('modules-container').innerHTML = `<div class="error-box">${msg}</div>`;
         }
 
-        async function fetchModuleMeta(moduleName) {
+        async function fetchModuleMeta(moduleInput) {
+            if (typeof moduleInput === 'object' && moduleInput !== null) {
+                return {
+                    fullName: moduleInput.fullName || 'Unknown URL',
+                    appName: moduleInput.appName || 'Unknown App',
+                    version: moduleInput.version || 'unknown',
+                    packageType: moduleInput.packageType || 'unknown',
+                    description: moduleInput.description || 'Custom external package.',
+                };
+            }
+
+            const moduleName = moduleInput;
             try {
                 const res = await fetch(`${JSDELIVR}/${moduleName}/package.json`);
                 const json = await res.json();
@@ -465,7 +477,7 @@
                     appName: moduleName,
                     version: 'unknown',
                     packageType: 'unknown',
-                    description: 'Failed to fetch module metadata.',
+                    description: 'Failed to fetch module metadata from jsDelivr.',
                 };
             }
         }
