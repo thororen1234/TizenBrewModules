@@ -8,6 +8,11 @@ const CONFIG_URL = 'https://raw.githubusercontent.com/reisxd/TizenBrew/refs/head
 
 async function fetchAndEvalConfig() {
     const res = await fetch(CONFIG_URL);
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch upstream config: HTTP ${res.status} ${res.statusText}`);
+    }
+
     const code = await res.text();
 
     const defaultConfigMatch = code.match(/return \{([\s\S]*?)\};/);
@@ -21,10 +26,26 @@ async function updateModules() {
 
     try {
         const config = await fetchAndEvalConfig();
-        const newModulesData = { modules: config.modules };
+        const upstreamModules = config.modules || [];
+        let existingModules = [];
+
+        if (fs.existsSync('./modules.json')) {
+            try {
+                const fileData = fs.readFileSync('./modules.json', 'utf8');
+                const parsedData = JSON.parse(fileData);
+                if (Array.isArray(parsedData.modules)) {
+                    existingModules = parsedData.modules;
+                }
+            } catch (err) {
+                console.warn(`[${new Date().toISOString()}] Warning: Could not parse existing modules.json. Starting fresh.`);
+            }
+        }
+
+        const mergedModules = [...new Set([...existingModules, ...upstreamModules])];
+        const newModulesData = { modules: mergedModules };
 
         fs.writeFileSync('./modules.json', JSON.stringify(newModulesData, null, 4));
-        console.log(`[${new Date().toISOString()}] Successfully updated modules.json!`);
+        console.log(`[${new Date().toISOString()}] Successfully updated modules.json with ${mergedModules.length} total modules!`);
         return true;
     } catch (e) {
         console.error(`[${new Date().toISOString()}] Failed to update modules:`, e.message);
@@ -45,7 +66,7 @@ async function main() {
         console.log("Starting TizenBrew Module Updater and Web Server...");
 
         await updateModules();
-        cron.schedule('0 * * * *', () => {
+        cron.schedule('0 0 * * 0', () => {
             updateModules();
         });
 

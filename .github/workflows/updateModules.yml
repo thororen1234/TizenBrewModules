@@ -1,38 +1,38 @@
 name: Hourly Module Updater
 
 on:
-    schedule:
-        - cron: "0 * * * *"
-    workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
 
 permissions:
-    contents: write
+  contents: write
 
 jobs:
-    update-json:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v6
+  update-json:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v6
-              with:
-                  node-version: "24"
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
 
-            - name: Run updater script
-              run: node index.js --run-once
+      - name: Run updater script
+        run: node index.js --run-once
 
-            - name: Commit and push changes if any
-              run: |
-                  git config --global user.name "github-actions[bot]"
-                  git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - name: Commit and push changes if any
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-                  if [[ -n "$(git status --porcelain modules.json)" ]]; then
-                    git add modules.json
-                    git commit -m "chore: auto-update modules.json from upstream"
-                    git push
-                    echo "Updated modules.json successfully."
-                  else
-                    echo "No changes found in modules.json."
-                  fi
+          if [[ -n "$(git status --porcelain modules.json)" ]]; then
+            git add modules.json
+            git commit -m "chore: auto-update modules.json from upstream"
+            git push
+            echo "Updated modules.json successfully."
+          else
+            echo "No changes found in modules.json."
+          fi
