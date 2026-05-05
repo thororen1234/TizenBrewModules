@@ -48,7 +48,7 @@
         },
         {
             "githubRepo": "jeppevinkel/jellyfin-tizen-builds",
-            "fileName": "Jellyfin-SmartHub.wgt",
+            "fileName": "Jellyfin-GrayFix.wgt",
             "appName": "Jellyfin with a Potentially Gray Bars Fix",
             "packageType": "wgt",
             "description": "Jellyfin Samsung TV Client with a Potentially Gray Bars Fix.",
