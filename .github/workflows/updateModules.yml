@@ -1,4 +1,4 @@
-name: Hourly Module Updater
+name: Weekly Module Updater
 
 on:
   schedule:
@@ -12,13 +12,18 @@ jobs:
   update-json:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
-      - name: Set up Node.js
+      - uses: pnpm/action-setup@v6
+
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: "24"
+          node-version: 24
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Run updater script
         run: node index.js --run-once
